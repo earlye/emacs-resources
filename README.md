@@ -7,7 +7,7 @@ Installation:
 
 In a terminal:
 ```bash
-git clone -r {url} ~/.emacs.d
+git clone --recursive git@github.com:earlye/emacs-resources.git ~/.emacs.d
 ```
 
 In your ~/.emacs file:
