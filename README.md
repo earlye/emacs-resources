@@ -3,7 +3,8 @@ A set of emacs utilities. This is intended to replace your entire
 directory. Don't want to do that? Well, you could always fork and
 modify to your content. ;-)
 
-Installation:
+Installation
+------------
 
 In a terminal:
 ```bash
@@ -16,3 +17,17 @@ In your ~/.emacs file:
 ```
 
 That's it!
+
+Features
+--------
+
+* php-mode
+
+* markdown-mode
+
+* earlye functions:
+
+** M-x iwb : indent whole buffer
+
+** M-x ede-insert-cpp-header-guard : generates a c++ header guard with
+   copyright and user's full name.
