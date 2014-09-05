@@ -45,3 +45,14 @@
   (delete-trailing-whitespace)
   (indent-region (point-min) (point-max) nil)
   (untabify (point-min) (point-max)))
+
+(define-abbrev-table 'global-abbrev-table '(
+    ("alpha" "α")
+    ("beta" "β")
+    ("gamma" "γ")
+    ("theta" "θ")
+    ("inf" "∞")
+
+    ("ar1" "→")
+    ("ar2" "⇒")
+    ))
