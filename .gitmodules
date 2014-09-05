@@ -1,0 +1,3 @@
+[submodule "my-php-mode"]
+	path = php-mode
+	url = git@github.com:earlye/php-mode.git
