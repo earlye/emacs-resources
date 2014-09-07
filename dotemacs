@@ -12,7 +12,12 @@
 (global-set-key (kbd "<f11>") 'ff-find-other-file)
 (global-set-key (kbd "<M-RET>") 'find-file-at-point)
 (global-set-key (kbd "<f12>") 'compile)
+
+;; set up shell mode
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(add-to-list ‘comint-output-filter-functions ‘ansi-color-process-output)
+(add-hook 'shell-mode-hook
+          (lambda () (local-set-key (kbd "<M-RET>") 'find-file-at-point)))
 
 ;; earlye extensions
 (add-to-list 'load-path "~/.emacs.d/earlye")
