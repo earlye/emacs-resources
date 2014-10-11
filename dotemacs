@@ -15,7 +15,7 @@
 
 ;; set up shell mode
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-(add-to-list ‘comint-output-filter-functions ‘ansi-color-process-output)
+;; doesn't work: (add-to-list ‘comint-output-filter-functions ‘ansi-color-process-output)
 (add-hook 'shell-mode-hook
           (lambda () (local-set-key (kbd "<M-RET>") 'find-file-at-point)))
 
@@ -34,6 +34,10 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
+;; javascript mode...
+(setq javascript-mode-hook
+  '(lambda () (progn
+    (set-variable 'indent-tabs-mode nil))))
 
 ;; pbcopy support...
 (defun copy-from-osx ()
