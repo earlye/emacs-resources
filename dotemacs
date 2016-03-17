@@ -1,6 +1,8 @@
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
+(set-face-foreground 'minibuffer-prompt "yellow")
+
 (setq compile-history
       '("mvn clean install"
         "make -C $WORKSPACE"
@@ -12,6 +14,7 @@
 (global-set-key (kbd "<f11>") 'ff-find-other-file)
 (global-set-key (kbd "<M-RET>") 'find-file-at-point)
 (global-set-key (kbd "<f12>") 'compile)
+(global-set-key "\C-c\C-d" "\C-a\C- \C-n\M-w\C-y\C-p\C-p")
 
 ;; set up shell mode
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
@@ -69,13 +72,13 @@
  )
 
 
-(define-abbrev-table 'global-abbrev-table '(
-                                            ("alpha" "α")
-                                            ("beta" "β")
-                                            ("gamma" "γ")
-                                            ("theta" "θ")
-                                            ("inf" "∞")
+;; (define-abbrev-table 'global-abbrev-table '(
+;;                                             ("alpha" "α")
+;;                                             ("beta" "β")
+;;                                             ("gamma" "γ")
+;;                                             ("theta" "θ")
+;;                                             ("inf" "∞")
 
-                                            ("ar1" "→")
-                                            ("ar2" "⇒")
-                                            ))
+;;                                             ("ar1" "→")
+;;                                             ("ar2" "⇒")
+;;                                             ))
