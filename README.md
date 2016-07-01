@@ -10,7 +10,7 @@ modify to your content. ;-)
 In a terminal:
 ```bash
 git clone --recursive git@github.com:earlye/emacs-resources.git ~/.emacs.d
-echo "(load \"~/.emacs.d/dotemacs\")" >> .emacs
+echo "(load \"~/.emacs.d/dotemacs\")" >> ~/.emacs
 ```
 
 That's it!
