@@ -19,6 +19,8 @@
 
 (define-abbrev-table 'completion-list-mode-abbrev-table '())
 
+(define-abbrev-table 'edit-abbrevs-mode-abbrev-table '())
+
 (define-abbrev-table 'emacs-lisp-byte-code-mode-abbrev-table '())
 
 (define-abbrev-table 'emacs-lisp-mode-abbrev-table '())
@@ -27,13 +29,8 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(
-    ("alpha" "α" nil 0)
     ("ar1" "→" nil 0)
     ("ar2" "⇒" nil 0)
-    ("beta" "β" nil 0)
-    ("gamma" "γ" nil 0)
-    ("inf" "∞" nil 0)
-    ("theta" "θ" nil 0)
    ))
 
 (define-abbrev-table 'help-mode-abbrev-table '())
@@ -47,6 +44,8 @@
 (define-abbrev-table 'js-mode-abbrev-table '())
 
 (define-abbrev-table 'lisp-mode-abbrev-table '())
+
+(define-abbrev-table 'messages-buffer-mode-abbrev-table '())
 
 (define-abbrev-table 'objc-mode-abbrev-table
   '(
