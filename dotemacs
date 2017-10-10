@@ -87,3 +87,8 @@
 ;;                                             ("ar2" "⇒")
 ;;                                             ))
 (standard-display-ascii ?\t "^I      ")
+
+(defun term-use-sensible-escape-char (&rest ignored)
+  (term-set-escape-char 24))
+(advice-add 'term :after #'term-use-sensible-escape-char)
+
