@@ -7,6 +7,7 @@
       '("mvn clean install"
         "make -C $WORKSPACE"
         "ace"
+        "fab"
         ))
 (setq compile-command "ace")
 
@@ -33,6 +34,10 @@
 ;; php-mode
 (add-to-list 'load-path "~/.emacs.d/php-mode")
 (load "php-mode")
+
+;; yaml-mode
+(add-to-list 'load-path "~/.emacs.d/yaml-mode")
+(load "yaml-mode")
 
 ;; markdown mode...
 (add-to-list 'load-path "~/.emacs.d/markdown-mode")
@@ -96,3 +101,9 @@
   (term-set-escape-char 24))
 (advice-add 'term :after #'term-use-sensible-escape-char)
 
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region compilation-filter-start (point))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
