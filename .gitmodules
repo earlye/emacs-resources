@@ -4,7 +4,8 @@
 
 [submodule "markdown-mode"]
 	path = markdown-mode
-	url = git://jblevins.org/git/markdown-mode.git
+	url = https://github.com/jrblevin/markdown-mode.git
+	# formerly: git://jblevins.org/git/markdown-mode.git
 [submodule "yaml-mode"]
 	path = yaml-mode
 	url = git@github.com:earlye/yaml-mode.git
