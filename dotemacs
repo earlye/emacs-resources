@@ -53,7 +53,7 @@
 
 ;; pbcopy support...
 (if (eq system-type 'darwin)
-    (
+    '(
      (defun copy-from-osx ()
        (shell-command-to-string "pbpaste"))
 
