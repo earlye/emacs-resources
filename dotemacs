@@ -48,18 +48,40 @@
 
 ;; javascript mode...
 (setq javascript-mode-hook
-  '(lambda () (progn
-    (set-variable 'indent-tabs-mode nil))))
+      '(lambda () (progn
+                    (subword-mode)
+                    (set-variable 'show-trailing-whitespace t)
+                    (set-variable 'indent-tabs-mode nil))))
 
 ;; lisp mode...
 (add-hook 'emacs-lisp-mode-hook
-  '(lambda () (progn
-    (set-variable 'indent-tabs-mode nil))))
+          '(lambda () (progn
+                        (set-variable 'show-trailing-whitespace t)
+                        (set-variable 'indent-tabs-mode nil))))
+
+;; lisp mode...
+(add-hook 'html-mode-hook
+          '(lambda () (progn
+                        (set-variable 'show-trailing-whitespace t)
+                        (set-variable 'indent-tabs-mode nil))))
 
 ;; c++ mode...
 (add-hook 'c++-mode-hook
-  '(lambda () (progn
-    (set-variable 'indent-tabs-mode nil))))
+          '(lambda () (progn
+                        (subword-mode)
+                        (set-variable 'show-trailing-whitespace t)
+                        (set-variable 'indent-tabs-mode nil))))
+
+;; c++ mode...
+(add-hook 'markdown-mode-hook
+          '(lambda () (progn
+                        (set-variable 'show-trailing-whitespace t)
+                        (set-variable 'indent-tabs-mode nil))))
+
+(defun c++-mode-before-save-hook ()
+  (when (eq major-mode 'c++-mode)
+    (delete-trailing-whitespace)))
+(add-hook 'before-save-hook #'c++-mode-before-save-hook)
 
 ;; pbcopy support...
 (if (eq system-type 'darwin)
@@ -74,7 +96,7 @@
            (process-send-eof proc))))
 
      (setq interprogram-cut-function 'paste-to-osx)
-     
+
      (setq interprogram-paste-function 'copy-from-osx)
      ))
 
