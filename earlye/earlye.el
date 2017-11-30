@@ -80,7 +80,12 @@
   (delete-trailing-whitespace)
   (indent-region (point-min) (point-max) nil)
   (untabify (point-min) (point-max))
+  (set-buffer-file-coding-system 'utf-8-unix)
   )
 
+(defun dtw ()
+  "delete trailing whitespace"
+  (delete-trailing-whitespace)
+  )
 
 (provide 'earlye)
