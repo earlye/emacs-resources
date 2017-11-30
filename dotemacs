@@ -20,6 +20,7 @@
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 (global-set-key (kbd "C-c <up>")    'windmove-up)
 (global-set-key (kbd "C-c <down>")  'windmove-down)
+(global-set-key (kbd "C-x f")  'find-file)
 
 ;; set up shell mode
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
@@ -38,6 +39,10 @@
 ;; yaml-mode
 (add-to-list 'load-path "~/.emacs.d/yaml-mode")
 (load "yaml-mode")
+
+;; yaml-mode
+(add-to-list 'load-path "~/.emacs.d/gprof-mode")
+(load "gprof")
 
 ;; markdown mode...
 (add-to-list 'load-path "~/.emacs.d/markdown-mode")
@@ -72,16 +77,38 @@
                         (set-variable 'show-trailing-whitespace t)
                         (set-variable 'indent-tabs-mode nil))))
 
-;; c++ mode...
+;; java mode...
+(add-hook 'java-mode-hook
+          '(lambda () (progn
+                        (subword-mode)
+                        (set-variable 'show-trailing-whitespace t)
+                        (set-variable 'indent-tabs-mode nil))))
+
+;; python mode...
+(add-hook 'python-mode-hook
+          '(lambda () (progn
+                        (subword-mode)
+                        (set-variable 'show-trailing-whitespace t))))
+
+;; markdown mode...
 (add-hook 'markdown-mode-hook
           '(lambda () (progn
                         (set-variable 'show-trailing-whitespace t)
                         (set-variable 'indent-tabs-mode nil))))
 
-(defun c++-mode-before-save-hook ()
-  (when (eq major-mode 'c++-mode)
+;; remove trailing whitespace before save
+(defun delete-trailing-whitespace-before-save-hook ()
+  (when (member major-mode '(
+                             c++-mode
+                             emacs-lisp-mode
+                             html-mode
+                             java-mode
+                             javascript-mode
+                             markdown-mode
+                             python-mode
+                             ))
     (delete-trailing-whitespace)))
-(add-hook 'before-save-hook #'c++-mode-before-save-hook)
+(add-hook 'before-save-hook #'delete-trailing-whitespace-before-save-hook)
 
 ;; pbcopy support...
 (if (eq system-type 'darwin)
@@ -101,21 +128,10 @@
      ))
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(gud-gdb-command-name "gdb --annotate=1")
  '(large-file-warning-threshold nil)
  '(make-backup-files nil)
  '(transient-mark-mode t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 
 ;; (define-abbrev-table 'global-abbrev-table '(
 ;;                                             ("alpha" "α")
@@ -139,3 +155,9 @@
   (ansi-color-apply-on-region compilation-filter-start (point))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+(defun kill-other-buffers ()
+  "Kill all other buffers."
+  (interactive)
+        (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
