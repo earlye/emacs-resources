@@ -57,6 +57,20 @@
                     (subword-mode)
                     (set-variable 'show-trailing-whitespace t)
                     (set-variable 'indent-tabs-mode nil))))
+(setq-default indent-tabs-mode nil)
+(setq js-mode-hook
+      '(lambda () (progn
+                    (subword-mode)
+                    (set-variable 'js-indent-level 2)
+                    (set-variable 'show-trailing-whitespace t)
+                    (set-variable 'indent-tabs-mode nil)
+                    (add-hook 'before-save-hook
+                              (lambda()
+                                (progn
+                                  (delete-trailing-whitespace)))
+                              nil t)
+                    )))
+
 
 ;; lisp mode...
 (add-hook 'emacs-lisp-mode-hook
@@ -96,6 +110,7 @@
                         (set-variable 'show-trailing-whitespace t)
                         (set-variable 'indent-tabs-mode nil))))
 
+
 ;; remove trailing whitespace before save
 (defun delete-trailing-whitespace-before-save-hook ()
   (when (member major-mode '(
@@ -106,6 +121,7 @@
                              javascript-mode
                              markdown-mode
                              python-mode
+                             scala-mode
                              ))
     (delete-trailing-whitespace)))
 (add-hook 'before-save-hook #'delete-trailing-whitespace-before-save-hook)
@@ -161,3 +177,39 @@
   (interactive)
         (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
+;; scala mode... I'm not even sure what ensime is supposed to do, but it seems to
+;; disable subword-mode, which is more important to me.
+;; (add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/") t)
+;; (require 'ensime)
+;; (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+(add-hook 'scala-mode-hook
+         '(lambda () (progn
+                        (subword-mode)
+                        (set-variable 'show-trailing-whitespace t)
+                        (set-variable 'indent-tabs-mode nil))))
+(remove-hook 'scala-mode-hook 'ensima-scala-mode-hook)
+
+
+(ignore-errors
+  (require 'ansi-color)
+  (defun my-colorize-compilation-buffer ()
+    (when (eq major-mode 'compilation-mode)
+      (ansi-color-apply-on-region compilation-filter-start (point-max))))
+  (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
+
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  (when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+    (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
+(package-initialize)
+
+(defun sort-lines-nocase ()
+  (interactive)
+  (let ((sort-fold-case t))
+    (call-interactively 'sort-lines)))
