@@ -55,8 +55,16 @@
 (setq javascript-mode-hook
       '(lambda () (progn
                     (subword-mode)
+                    (set-variable 'js-indent-level 2)
                     (set-variable 'show-trailing-whitespace t)
                     (set-variable 'indent-tabs-mode nil))))
+
+(setq js2-mode-hook
+      '(lambda () (progn
+                    (subword-mode)
+                    (set-variable 'show-trailing-whitespace t)
+                    (set-variable 'indent-tabs-mode nil))))
+
 
 ;; lisp mode...
 (add-hook 'emacs-lisp-mode-hook
@@ -161,3 +169,5 @@
   (interactive)
         (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
+(setq dired-listing-switches "-alh")
+(custom-set-variables '(indent-tabs-mode nil))
