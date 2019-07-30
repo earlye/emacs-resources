@@ -58,6 +58,20 @@
                     (set-variable 'js-indent-level 2)
                     (set-variable 'show-trailing-whitespace t)
                     (set-variable 'indent-tabs-mode nil))))
+(setq-default indent-tabs-mode nil)
+(setq js-mode-hook
+      '(lambda () (progn
+                    (subword-mode)
+                    (set-variable 'js-indent-level 2)
+                    (set-variable 'show-trailing-whitespace t)
+                    (set-variable 'indent-tabs-mode nil)
+                    (add-hook 'before-save-hook
+                              (lambda()
+                                (progn
+                                  (delete-trailing-whitespace)))
+                              nil t)
+                    )))
+
 
 (setq js2-mode-hook
       '(lambda () (progn
@@ -104,6 +118,7 @@
                         (set-variable 'show-trailing-whitespace t)
                         (set-variable 'indent-tabs-mode nil))))
 
+
 ;; remove trailing whitespace before save
 (defun delete-trailing-whitespace-before-save-hook ()
   (when (member major-mode '(
@@ -114,6 +129,7 @@
                              javascript-mode
                              markdown-mode
                              python-mode
+                             scala-mode
                              ))
     (delete-trailing-whitespace)))
 (add-hook 'before-save-hook #'delete-trailing-whitespace-before-save-hook)
@@ -171,3 +187,82 @@
 
 (setq dired-listing-switches "-alh")
 (custom-set-variables '(indent-tabs-mode nil))
+;; scala mode... I'm not even sure what ensime is supposed to do, but it seems to
+;; disable subword-mode, which is more important to me.
+;; (add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/") t)
+;; (require 'ensime)
+;; (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+(add-hook 'scala-mode-hook
+         '(lambda () (progn
+                        (subword-mode)
+                        (set-variable 'show-trailing-whitespace t)
+                        (set-variable 'indent-tabs-mode nil))))
+(remove-hook 'scala-mode-hook 'ensima-scala-mode-hook)
+
+
+(ignore-errors
+  (require 'ansi-color)
+  (defun my-colorize-compilation-buffer ()
+    (when (eq major-mode 'compilation-mode)
+      (ansi-color-apply-on-region compilation-filter-start (point-max))))
+  (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
+
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  (when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+    (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
+(package-initialize)
+
+(defun sort-lines-nocase ()
+  (interactive)
+  (let ((sort-fold-case t))
+    (call-interactively 'sort-lines)))
+
+;; Stolen from (http://endlessparentheses.com/ansi-colors-in-the-compilation-buffer-output.html)
+(require 'ansi-color)
+(defun endless/colorize-compilation ()
+  "Colorize from `compilation-filter-start' to `point'."
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region
+     compilation-filter-start (point))))
+
+(add-hook 'compilation-filter-hook #'endless/colorize-compilation)
+
+;; Support integrating the mac clipboard
+(defun integrate-mac-clipboard ()
+  (defun mac-copy () (shell-command-to-string "pbpaste"))
+
+  (defun mac-paste (text &optional push)
+    (let ((process-connection-type nil))
+      (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+        (process-send-string proc text)
+        (process-send-eof proc))))
+
+  (setq interprogram-cut-function 'mac-paste)
+  (setq interprogram-paste-function 'mac-copy))
+
+;; Support integrating the mac clipboard through an SSH session back to the ssh client.
+;; This requires two things:
+;; 1: The following entry in .ssh/config: RemoteForward 127.0.0.1:2222 127.0.0.1:22
+;; 2: The machine to allow all users to ssh in.
+(defun integrate-remote-mac-clipboard()
+  (defun remote-mac-copy () (shell-command-to-string "ssh 127.0.0.1 -p 2222 pbpaste"))
+  (defun remote-mac-paste (text &optional push)
+    (let ((process-connection-type nil))
+      (let ((proc (start-process "pbcopy" "*Messages*" "ssh" "127.0.0.1" "-p" "2222" "pbcopy")))
+        (process-send-string proc text)
+        (process-send-eof proc))))
+
+  (setq interprogram-cut-function 'remote-mac-paste)
+  (setq interprogram-paste-function 'remote-mac-copy))
+
+;; Integrate the system clipboard
+(cond ((not (equal nil (getenv "SSH_CLIENT"))) (integrate-remote-mac-clipboard))
+      ((equal 'darwin system-type) (integrate-mac-clipboard))
+      ((t (message "not integrating system clipboard"))))
