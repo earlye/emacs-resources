@@ -237,6 +237,18 @@
   (setq interprogram-cut-function 'mac-paste)
   (setq interprogram-paste-function 'mac-copy))
 
+(defun integrate-remote-mac-clipboard()
+  (defun remote-mac-copy () (shell-command-to-string "ssh" "127.0.0.1" "-p" "2222" "pbpaste"))
+  (defun remote-mac-paste (text &optional push)
+    (let ((process-connection-type nil))
+      (let ((proc (start-process "ssh" "127.0.0.1" "-p" "2222" "pbcopy" "*Messages*" "pbcopy")))
+        (process-send-string proc text)
+        (process-send-eof proc))))
+
+  (setq interprogram-cut-function 'remote-mac-paste)
+  (setq interprogram-paste-function 'remote-mac-copy))
+
 ;; Integrate the system clipboard
-(cond ((equal 'darwin system-type) (integrate-mac-clipboard))
+(cond ((not (equal nil (getenv "SSH_CLIENT"))) (integrate-remote-mac-clipboard))
+      ((equal 'darwin system-type) (integrate-mac-clipboard))
       ((t (message "not integrating system clipboard"))))
