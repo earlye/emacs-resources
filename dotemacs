@@ -213,3 +213,30 @@
   (interactive)
   (let ((sort-fold-case t))
     (call-interactively 'sort-lines)))
+
+;; Stolen from (http://endlessparentheses.com/ansi-colors-in-the-compilation-buffer-output.html)
+(require 'ansi-color)
+(defun endless/colorize-compilation ()
+  "Colorize from `compilation-filter-start' to `point'."
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region
+     compilation-filter-start (point))))
+
+(add-hook 'compilation-filter-hook #'endless/colorize-compilation)
+
+;; Support integrating the mac clipboard
+(defun integrate-mac-clipboard ()
+  (defun mac-copy () (shell-command-to-string "pbpaste"))
+
+  (defun mac-paste (text &optional push)
+    (let ((process-connection-type nil))
+      (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+        (process-send-string proc text)
+        (process-send-eof proc))))
+
+  (setq interprogram-cut-function 'mac-paste)
+  (setq interprogram-paste-function 'mac-copy))
+
+;; Integrate the system clipboard
+(cond ((equal 'darwin system-type) (integrate-mac-clipboard))
+      ((t (message "not integrating system clipboard"))))
