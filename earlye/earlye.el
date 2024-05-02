@@ -51,6 +51,12 @@
   (insert id)
   )
 
+(defun ede-insert-testid( )
+  (interactive)
+  (setq id (ede-trim (shell-command-to-string "uuidgen | head -c 8 | tr '[:upper:]' '[:lower:]'" ) ))
+  (insert id)
+  )
+
 (defun ede-insert-translate-selection( )
   (interactive)
   (setq fnName (concat "str" (ede-trim (shell-command-to-string "uuidgen | sed s/-//g" )) "()"))
@@ -79,7 +85,8 @@
   (interactive)
   (delete-trailing-whitespace)
   (indent-region (point-min) (point-max) nil)
-  (untabify (point-min) (point-max))
+  (if (not 'indent-tabs-mode)
+      (untabify (point-min) (point-max)))
   (set-buffer-file-coding-system 'utf-8-unix)
   )
 
@@ -87,5 +94,10 @@
   "delete trailing whitespace"
   (delete-trailing-whitespace)
   )
+
+(defun compile-in-dir (dir command)
+  (interactive "DCompile in directory: \nsCommand: ")
+  (let ((default-directory dir))
+    (compile command)))
 
 (provide 'earlye)

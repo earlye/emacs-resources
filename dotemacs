@@ -1,7 +1,22 @@
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+(global-display-line-numbers-mode 1)
 
 (set-face-foreground 'minibuffer-prompt "yellow")
+
+
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (global-set-key [mouse-4] (lambda ()
+                              (interactive)
+                              (scroll-down 1)))
+  (global-set-key [mouse-5] (lambda ()
+                              (interactive)
+                              (scroll-up 1)))
+  (defun track-mouse (e))
+  (setq mouse-sel-mode t)
+)
 
 (setq compile-history
       '("mvn clean install"
@@ -51,6 +66,42 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
+;; groovy-mode-hook
+(setq groovy-mode-hook
+      '(lambda() (progn
+                   (subword-mode)
+                   (set-variable 'show-trailing-whitespace t)
+                   (add-hook 'before-save-hook
+                             (lambda()
+                               (progn
+                                 (delete-trailing-whitespace)))
+                             nil t)
+                   )))
+
+;; shellscript-mode
+(setq sh-mode-hook
+      '(lambda() (progn
+                   (subword-mode)
+                   (set-variable 'show-trailing-whitespace t)
+                   (add-hook 'before-save-hook
+                             (lambda()
+                               (progn
+                                 (delete-trailing-whitespace)))
+                             nil t)
+                   )))
+
+;; yaml-mode
+(setq yaml-mode-hook
+      '(lambda() (progn
+                   (subword-mode)
+                   (set-variable 'show-trailing-whitespace t)
+                   (add-hook 'before-save-hook
+                             (lambda()
+                               (progn
+                                 (delete-trailing-whitespace)))
+                             nil t)
+                   )))
+
 ;; javascript mode...
 (setq javascript-mode-hook
       '(lambda () (progn
@@ -68,6 +119,31 @@
                     (add-hook 'before-save-hook
                               (lambda()
                                 (progn
+                                  (delete-trailing-whitespace)))
+                              nil t)
+                    )))
+(setq typescript-mode-hook
+      '(lambda () (progn
+                    (subword-mode)
+                    (set-variable 'js-indent-level 2)
+                    (set-variable 'typescript-indent-level 2)
+                    (set-variable 'show-trailing-whitespace t)
+                    (set-variable 'indent-tabs-mode nil)
+                    (add-hook 'before-save-hook
+                              (lambda()
+                                (progn
+                                  (delete-trailing-whitespace)))
+                              nil t)
+                    )))
+
+(setq go-mode-hook
+      '(lambda () (progn
+                    (subword-mode)
+                    (set-variable 'indent-tabs-mode t)
+                    (add-hook 'before-save-hook
+                              (lambda()
+                                (progn
+                                  (set-variable 'show-trailing-whitespace t)
                                   (delete-trailing-whitespace)))
                               nil t)
                     )))
@@ -167,7 +243,7 @@
 ;;                                             ("ar1" "→")
 ;;                                             ("ar2" "⇒")
 ;;                                             ))
-(standard-display-ascii ?\t "^I      ")
+;;(standard-display-ascii ?\t "^I      ")
 
 (defun term-use-sensible-escape-char (&rest ignored)
   (term-set-escape-char 24))
@@ -266,3 +342,42 @@
 (cond ((not (equal nil (getenv "SSH_CLIENT"))) (integrate-remote-mac-clipboard))
       ((equal 'darwin system-type) (integrate-mac-clipboard))
       ((t (message "not integrating system clipboard"))))
+
+(global-git-gutter-mode +1)
+
+;; Stolen from https://stackoverflow.com/questions/637351/emacs-how-to-delete-text-without-kill-ring
+(defmacro earlye/delete-instead-of-kill (&rest body)
+  "Replaces `kill-region' with `delete-region' in BODY."
+  `(cl-letf (((symbol-function 'kill-region)
+              (lambda (beg end &optional yank-handler)
+                (delete-region beg end))))
+     ,@body))
+
+(defun earlye/delete-word (arg)
+  "Like `kill-word', but does not save to the `kill-ring'."
+  (interactive "*p")
+  (earlye/delete-instead-of-kill (kill-word arg)))
+
+(defun earlye/backward-delete-word (arg)
+  "Like `kill-word', but does not save to the `kill-ring'."
+  (interactive "*p")
+  (earlye/delete-instead-of-kill (backward-kill-word arg)))
+
+(global-set-key (kbd "M-D") 'earlye/delete-word)
+(global-set-key (kbd "M-\\") 'earlye/backward-delete-word)
+
+;; https://www.masteringemacs.org/article/compiling-running-scripts-emacs
+;;
+;; By default the compilation buffer is just a dumb display and you
+;; cannot communicate with the background process. If you pass the
+;; universal argument (C-u) you can; the buffer is switched to comint
+;; mode, and you can converse with the process as though you were
+;; running it in the shell.
+;;
+;; I generally prefer it to be interactive by default but for some
+;; inexplicable reason, that is not customizable.
+;;
+;; Instead I use this advice to toggle the comint flag on:
+;; (defadvice compile (before ad-compile-smart activate)
+;;   "Advises `compile' so it sets the argument COMINT to t."
+;;   (ad-set-arg 1 t))
