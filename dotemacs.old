@@ -1,0 +1,382 @@
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(global-display-line-numbers-mode 1)
+
+(set-face-foreground 'minibuffer-prompt "yellow")
+
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (global-set-key [mouse-4] (lambda ()
+                              (interactive)
+                              (scroll-down 1)))
+  (global-set-key [mouse-5] (lambda ()
+                              (interactive)
+                              (scroll-up 1)))
+  (defun track-mouse (e))
+  (setq mouse-sel-mode t)
+)
+
+;; (setq compile-history
+;;       '("mvn clean install"
+;;         "make -C $WORKSPACE"
+;;         "ace"
+;;         "fab"
+;;         ))
+;; (setq compile-command "ace")
+
+;; ;; set up keyboard
+;; (global-set-key (kbd "<f11>") 'ff-find-other-file)
+;; (global-set-key (kbd "<M-RET>") 'find-file-at-point)
+;; (global-set-key (kbd "<f12>") 'compile)
+;; (global-set-key "\C-c\C-d" "\C-a\C- \C-n\M-w\C-y\C-p\C-p")
+;; (global-set-key (kbd "C-c <left>")  'windmove-left)
+;; (global-set-key (kbd "C-c <right>") 'windmove-right)
+;; (global-set-key (kbd "C-c <up>")    'windmove-up)
+;; (global-set-key (kbd "C-c <down>")  'windmove-down)
+;; (global-set-key (kbd "C-x f")  'find-file)
+
+;; ;; set up shell mode
+;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+;; ;; doesn't work: (add-to-list ‘comint-output-filter-functions ‘ansi-color-process-output)
+;; (add-hook 'shell-mode-hook
+;;           (lambda () (local-set-key (kbd "<M-RET>") 'find-file-at-point)))
+
+;; ;; earlye extensions
+;; (add-to-list 'load-path "~/.emacs.d/earlye")
+;; (load "earlye")
+
+;; ;; php-mode
+;; (add-to-list 'load-path "~/.emacs.d/php-mode")
+;; (load "php-mode")
+
+;; ;; yaml-mode
+;; (add-to-list 'load-path "~/.emacs.d/yaml-mode")
+;; (load "yaml-mode")
+
+;; ;; yaml-mode
+;; (add-to-list 'load-path "~/.emacs.d/gprof-mode")
+;; (load "gprof")
+
+;; ;; markdown mode...
+;; (add-to-list 'load-path "~/.emacs.d/markdown-mode")
+;; (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
+;; (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+;; (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+;; (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;; ;; groovy-mode-hook
+;; (setq groovy-mode-hook
+;;       '(lambda() (progn
+;;                    (subword-mode)
+;;                    (set-variable 'show-trailing-whitespace t)
+;;                    (add-hook 'before-save-hook
+;;                              (lambda()
+;;                                (progn
+;;                                  (delete-trailing-whitespace)))
+;;                              nil t)
+;;                    )))
+
+;; ;; shellscript-mode
+;; (setq sh-mode-hook
+;;       '(lambda() (progn
+;;                    (subword-mode)
+;;                    (set-variable 'show-trailing-whitespace t)
+;;                    (add-hook 'before-save-hook
+;;                              (lambda()
+;;                                (progn
+;;                                  (delete-trailing-whitespace)))
+;;                              nil t)
+;;                    )))
+
+;; ;; yaml-mode
+;; (setq yaml-mode-hook
+;;       '(lambda() (progn
+;;                    (subword-mode)
+;;                    (set-variable 'show-trailing-whitespace t)
+;;                    (add-hook 'before-save-hook
+;;                              (lambda()
+;;                                (progn
+;;                                  (delete-trailing-whitespace)))
+;;                              nil t)
+;;                    )))
+
+;; ;; javascript mode...
+;; (setq javascript-mode-hook
+;;       '(lambda () (progn
+;;                     (subword-mode)
+;;                     (set-variable 'js-indent-level 2)
+;;                     (set-variable 'show-trailing-whitespace t)
+;;                     (set-variable 'indent-tabs-mode nil))))
+;; (setq-default indent-tabs-mode nil)
+;; (setq js-mode-hook
+;;       '(lambda () (progn
+;;                     (subword-mode)
+;;                     (set-variable 'js-indent-level 2)
+;;                     (set-variable 'show-trailing-whitespace t)
+;;                     (set-variable 'indent-tabs-mode nil)
+;;                     (add-hook 'before-save-hook
+;;                               (lambda()
+;;                                 (progn
+;;                                   (delete-trailing-whitespace)))
+;;                               nil t)
+;;                     )))
+;; (setq typescript-mode-hook
+;;       '(lambda () (progn
+;;                     (subword-mode)
+;;                     (set-variable 'js-indent-level 2)
+;;                     (set-variable 'typescript-indent-level 2)
+;;                     (set-variable 'show-trailing-whitespace t)
+;;                     (set-variable 'indent-tabs-mode nil)
+;;                     (add-hook 'before-save-hook
+;;                               (lambda()
+;;                                 (progn
+;;                                   (delete-trailing-whitespace)))
+;;                               nil t)
+;;                     )))
+
+;; (setq go-mode-hook
+;;       '(lambda () (progn
+;;                     (subword-mode)
+;;                     (set-variable 'indent-tabs-mode t)
+;;                     (add-hook 'before-save-hook
+;;                               (lambda()
+;;                                 (progn
+;;                                   (set-variable 'show-trailing-whitespace t)
+;;                                   (delete-trailing-whitespace)))
+;;                               nil t)
+;;                     )))
+
+
+;; (setq js2-mode-hook
+;;       '(lambda () (progn
+;;                     (subword-mode)
+;;                     (set-variable 'show-trailing-whitespace t)
+;;                     (set-variable 'indent-tabs-mode nil))))
+
+
+;; ;; lisp mode...
+;; (add-hook 'emacs-lisp-mode-hook
+;;           '(lambda () (progn
+;;                         (set-variable 'show-trailing-whitespace t)
+;;                         (set-variable 'indent-tabs-mode nil))))
+
+;; ;; lisp mode...
+;; (add-hook 'html-mode-hook
+;;           '(lambda () (progn
+;;                         (set-variable 'show-trailing-whitespace t)
+;;                         (set-variable 'indent-tabs-mode nil))))
+
+;; ;; c++ mode...
+;; (add-hook 'c++-mode-hook
+;;           '(lambda () (progn
+;;                         (subword-mode)
+;;                         (set-variable 'show-trailing-whitespace t)
+;;                         (set-variable 'indent-tabs-mode nil))))
+
+;; ;; java mode...
+;; (add-hook 'java-mode-hook
+;;           '(lambda () (progn
+;;                         (subword-mode)
+;;                         (set-variable 'show-trailing-whitespace t)
+;;                         (set-variable 'indent-tabs-mode nil))))
+
+;; ;; python mode...
+;; (add-hook 'python-mode-hook
+;;           '(lambda () (progn
+;;                         (subword-mode)
+;;                         (set-variable 'show-trailing-whitespace t))))
+
+;; ;; markdown mode...
+;; (add-hook 'markdown-mode-hook
+;;           '(lambda () (progn
+;;                         (set-variable 'show-trailing-whitespace t)
+;;                         (set-variable 'indent-tabs-mode nil))))
+
+
+;; ;; remove trailing whitespace before save
+;; (defun delete-trailing-whitespace-before-save-hook ()
+;;   (when (member major-mode '(
+;;                              c++-mode
+;;                              emacs-lisp-mode
+;;                              html-mode
+;;                              java-mode
+;;                              javascript-mode
+;;                              markdown-mode
+;;                              python-mode
+;;                              scala-mode
+;;                              ))
+;;     (delete-trailing-whitespace)))
+;; (add-hook 'before-save-hook #'delete-trailing-whitespace-before-save-hook)
+
+;; ;; pbcopy support...
+;; (if (eq system-type 'darwin)
+;;     '(
+;;      (defun copy-from-osx ()
+;;        (shell-command-to-string "pbpaste"))
+
+;;      (defun paste-to-osx (text &optional push)
+;;        (let ((process-connection-type nil))
+;;          (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+;;            (process-send-string proc text)
+;;            (process-send-eof proc))))
+
+;;      (setq interprogram-cut-function 'paste-to-osx)
+
+;;      (setq interprogram-paste-function 'copy-from-osx)
+;;      ))
+
+;; (custom-set-variables
+;;  '(gud-gdb-command-name "gdb --annotate=1")
+;;  '(large-file-warning-threshold nil)
+;;  '(make-backup-files nil)
+;;  '(transient-mark-mode t))
+
+;; ;; (define-abbrev-table 'global-abbrev-table '(
+;; ;;                                             ("alpha" "α")
+;; ;;                                             ("beta" "β")
+;; ;;                                             ("gamma" "γ")
+;; ;;                                             ("theta" "θ")
+;; ;;                                             ("inf" "∞")
+
+;; ;;                                             ("ar1" "→")
+;; ;;                                             ("ar2" "⇒")
+;; ;;                                             ))
+;; ;;(standard-display-ascii ?\t "^I      ")
+
+;; (defun term-use-sensible-escape-char (&rest ignored)
+;;   (term-set-escape-char 24))
+;; (advice-add 'term :after #'term-use-sensible-escape-char)
+
+;; (require 'ansi-color)
+;; (defun colorize-compilation-buffer ()
+;;   (toggle-read-only)
+;;   (ansi-color-apply-on-region compilation-filter-start (point))
+;;   (toggle-read-only))
+;; (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+;; (defun kill-other-buffers ()
+;;   "Kill all other buffers."
+;;   (interactive)
+;;         (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
+;; (setq dired-listing-switches "-alh")
+;; (custom-set-variables '(indent-tabs-mode nil))
+;; ;; scala mode... I'm not even sure what ensime is supposed to do, but it seems to
+;; ;; disable subword-mode, which is more important to me.
+;; ;; (add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/") t)
+;; ;; (require 'ensime)
+;; ;; (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+;; (add-hook 'scala-mode-hook
+;;          '(lambda () (progn
+;;                         (subword-mode)
+;;                         (set-variable 'show-trailing-whitespace t)
+;;                         (set-variable 'indent-tabs-mode nil))))
+;; (remove-hook 'scala-mode-hook 'ensima-scala-mode-hook)
+
+
+;; (ignore-errors
+;;   (require 'ansi-color)
+;;   (defun my-colorize-compilation-buffer ()
+;;     (when (eq major-mode 'compilation-mode)
+;;       (ansi-color-apply-on-region compilation-filter-start (point-max))))
+;;   (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
+
+;; (require 'package)
+;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+;;                     (not (gnutls-available-p))))
+;;        (proto (if no-ssl "http" "https")))
+;;   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+;;   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+;;   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+;;   (when (< emacs-major-version 24)
+;;     ;; For important compatibility libraries like cl-lib
+;;     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
+;; (package-initialize)
+
+;; (defun sort-lines-nocase ()
+;;   (interactive)
+;;   (let ((sort-fold-case t))
+;;     (call-interactively 'sort-lines)))
+
+;; ;; Stolen from (http://endlessparentheses.com/ansi-colors-in-the-compilation-buffer-output.html)
+;; (require 'ansi-color)
+;; (defun endless/colorize-compilation ()
+;;   "Colorize from `compilation-filter-start' to `point'."
+;;   (let ((inhibit-read-only t))
+;;     (ansi-color-apply-on-region
+;;      compilation-filter-start (point))))
+
+;; (add-hook 'compilation-filter-hook #'endless/colorize-compilation)
+
+;; ;; Support integrating the mac clipboard
+;; (defun integrate-mac-clipboard ()
+;;   (defun mac-copy () (shell-command-to-string "pbpaste"))
+
+;;   (defun mac-paste (text &optional push)
+;;     (let ((process-connection-type nil))
+;;       (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+;;         (process-send-string proc text)
+;;         (process-send-eof proc))))
+
+;;   (setq interprogram-cut-function 'mac-paste)
+;;   (setq interprogram-paste-function 'mac-copy))
+
+;; ;; Support integrating the mac clipboard through an SSH session back to the ssh client.
+;; ;; This requires two things:
+;; ;; 1: The following entry in .ssh/config: RemoteForward 127.0.0.1:2222 127.0.0.1:22
+;; ;; 2: The machine to allow all users to ssh in.
+;; (defun integrate-remote-mac-clipboard()
+;;   (defun remote-mac-copy () (shell-command-to-string "ssh 127.0.0.1 -p 2222 pbpaste"))
+;;   (defun remote-mac-paste (text &optional push)
+;;     (let ((process-connection-type nil))
+;;       (let ((proc (start-process "pbcopy" "*Messages*" "ssh" "127.0.0.1" "-p" "2222" "pbcopy")))
+;;         (process-send-string proc text)
+;;         (process-send-eof proc))))
+
+;;   (setq interprogram-cut-function 'remote-mac-paste)
+;;   (setq interprogram-paste-function 'remote-mac-copy))
+
+;; ;; Integrate the system clipboard
+;; (cond ((not (equal nil (getenv "SSH_CLIENT"))) (integrate-remote-mac-clipboard))
+;;       ((equal 'darwin system-type) (integrate-mac-clipboard))
+;;       ((t (message "not integrating system clipboard"))))
+
+;; (global-git-gutter-mode +1)
+
+;; ;; Stolen from https://stackoverflow.com/questions/637351/emacs-how-to-delete-text-without-kill-ring
+;; (defmacro earlye/delete-instead-of-kill (&rest body)
+;;   "Replaces `kill-region' with `delete-region' in BODY."
+;;   `(cl-letf (((symbol-function 'kill-region)
+;;               (lambda (beg end &optional yank-handler)
+;;                 (delete-region beg end))))
+;;      ,@body))
+
+;; (defun earlye/delete-word (arg)
+;;   "Like `kill-word', but does not save to the `kill-ring'."
+;;   (interactive "*p")
+;;   (earlye/delete-instead-of-kill (kill-word arg)))
+
+;; (defun earlye/backward-delete-word (arg)
+;;   "Like `kill-word', but does not save to the `kill-ring'."
+;;   (interactive "*p")
+;;   (earlye/delete-instead-of-kill (backward-kill-word arg)))
+
+;; (global-set-key (kbd "M-D") 'earlye/delete-word)
+;; (global-set-key (kbd "M-\\") 'earlye/backward-delete-word)
+
+;; ;; https://www.masteringemacs.org/article/compiling-running-scripts-emacs
+;; ;;
+;; ;; By default the compilation buffer is just a dumb display and you
+;; ;; cannot communicate with the background process. If you pass the
+;; ;; universal argument (C-u) you can; the buffer is switched to comint
+;; ;; mode, and you can converse with the process as though you were
+;; ;; running it in the shell.
+;; ;;
+;; ;; I generally prefer it to be interactive by default but for some
+;; ;; inexplicable reason, that is not customizable.
+;; ;;
+;; ;; Instead I use this advice to toggle the comint flag on:
+;; ;; (defadvice compile (before ad-compile-smart activate)
+;; ;;   "Advises `compile' so it sets the argument COMINT to t."
+;; ;;   (ad-set-arg 1 t))

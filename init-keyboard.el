@@ -1,0 +1,10 @@
+;; ;; set up keyboard
+(global-set-key (kbd "<M-RET>") 'find-file-at-point)
+(global-set-key (kbd "<f11>") 'ff-find-other-file)
+(global-set-key (kbd "<f12>") 'compile)
+; (global-set-key "\C-c\C-d" "\C-a\C- \C-n\M-w\C-y\C-p\C-p")
+; (global-set-key (kbd "C-c <left>")  'windmove-left)
+; (global-set-key (kbd "C-c <right>") 'windmove-right)
+; (global-set-key (kbd "C-c <up>")    'windmove-up)
+; (global-set-key (kbd "C-c <down>")  'windmove-down)
+(global-set-key (kbd "C-x f")  'find-file)

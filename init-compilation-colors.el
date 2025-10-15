@@ -1,0 +1,6 @@
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (setq buffer-read-only nil)
+  (ansi-color-apply-on-region compilation-filter-start (point))
+  (read-only-mode))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
