@@ -1,5 +1,6 @@
 (defun ede_load (name)
-  (load (concat (file-name-directory (or load-file-name (buffer-file-name))) name))
+  (let ((filename (concat (file-name-directory (or load-file-name (buffer-file-name))) name)))
+    (load filename))
   )
 
 (global-display-line-numbers-mode 1)
@@ -7,9 +8,10 @@
 (put 'upcase-region 'disabled nil)
 (set-face-foreground 'minibuffer-prompt "yellow")
 
+(ede_load "init-melpa.el") ;; has to come before other packages so they can load properly
+
 (ede_load "init-keyboard.el")
 (ede_load "init-treesitter.el")
-(ede_load "init-melpa.el")
 (ede_load "init-yaml-mode.el")
 (ede_load "earlye/indent-whole-buffer.el")
 (ede_load "init-compilation-colors.el")
