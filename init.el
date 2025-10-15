@@ -3,6 +3,17 @@
     (load filename))
   )
 
+
+(custom-set-variables
+ '(package-selected-packages
+   '(editorconfig-custom-majormode elisa ellama erefactor treesit-auto
+				   web-mode xclip))
+ '(safe-local-variable-values
+   '((js-indent-level . 2) (make-backup-files)
+     (typescript-auto-indent-flag . t) (typescript-indent-level . 4)
+     (javascript-indent-level . 4) (yaml-indent-offset . 2)))
+ '(show-trailing-whitespace t))
+
 (global-display-line-numbers-mode 1)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
